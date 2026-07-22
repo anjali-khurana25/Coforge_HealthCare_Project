@@ -1,64 +1,119 @@
-from db_connection import connection, cursor
-from logger_module import logger
-import validation_module
+import mysql.connector
+
+from db_connection import (
+    connection,
+    cursor
+)
+
+from logger_module import (
+    application_logger,
+    exception_logger
+)
 
 
 def generate_bill():
+
     try:
 
-        bill_id = input("Enter Bill ID : ").strip()
-        patient_id = input("Enter Patient ID : ").strip()
-        appointment_id = input("Enter Appointment ID : ").strip()
+        bill_id = input(
+            "Enter Bill ID : "
+        ).strip()
+
+        patient_id = input(
+            "Enter Patient ID : "
+        ).strip()
+
+        appointment_id = input(
+            "Enter Appointment ID : "
+        ).strip()
 
         # -------------------------------
         # Duplicate Bill Check
         # -------------------------------
 
         cursor.execute(
-            "SELECT * FROM bills WHERE bill_id=%s",
+            """
+            SELECT *
+            FROM bills
+            WHERE bill_id=%s
+            """,
             (bill_id,)
         )
 
         if cursor.fetchone():
-            print("Bill ID already exists.")
-            logger.warning(f"Duplicate Bill ID : {bill_id}")
+
+            print(
+                "Bill ID already exists."
+            )
+
+            application_logger.warning(
+                f"Duplicate Bill ID : {bill_id}"
+            )
+
             return
 
         # -------------------------------
-        # Patient Check
+        # Patient Validation
         # -------------------------------
 
         cursor.execute(
-            "SELECT * FROM patients WHERE patient_id=%s",
+            """
+            SELECT *
+            FROM patients
+            WHERE patient_id=%s
+            """,
             (patient_id,)
         )
 
         if cursor.fetchone() is None:
-            print("Patient does not exist.")
-            logger.warning(f"Invalid Patient ID : {patient_id}")
+
+            print(
+                "Patient does not exist."
+            )
+
+            application_logger.warning(
+                f"Invalid Patient ID : {patient_id}"
+            )
+
             return
 
         # -------------------------------
-        # Appointment Check
+        # Appointment Validation
         # -------------------------------
 
         cursor.execute(
-            "SELECT status FROM appointments WHERE appointment_id=%s",
+            """
+            SELECT status
+            FROM appointments
+            WHERE appointment_id=%s
+            """,
             (appointment_id,)
         )
 
         appointment = cursor.fetchone()
 
         if appointment is None:
-            print("Appointment does not exist.")
-            logger.warning(f"Invalid Appointment ID : {appointment_id}")
+
+            print(
+                "Appointment does not exist."
+            )
+
+            application_logger.warning(
+                f"Invalid Appointment ID : {appointment_id}"
+            )
+
             return
 
         if appointment[0] != "Completed":
-            print("Bill can only be generated for completed appointments.")
-            logger.warning(
+
+            print(
+                "Bill can only be generated for completed appointments."
+            )
+
+            application_logger.warning(
                 f"Appointment {appointment_id} not completed."
             )
+
             return
 
         # -------------------------------
@@ -66,15 +121,24 @@ def generate_bill():
         # -------------------------------
 
         cursor.execute(
-            "SELECT * FROM bills WHERE appointment_id=%s",
+            """
+            SELECT *
+            FROM bills
+            WHERE appointment_id=%s
+            """,
             (appointment_id,)
         )
 
         if cursor.fetchone():
-            print("Bill already generated for this appointment.")
-            logger.warning(
-                f"Duplicate bill for Appointment {appointment_id}"
+
+            print(
+                "Bill already exists for this appointment."
             )
+
+            application_logger.warning(
+                f"Duplicate Bill for Appointment {appointment_id}"
+            )
+
             return
 
         # -------------------------------
@@ -82,47 +146,82 @@ def generate_bill():
         # -------------------------------
 
         consultation_fee = float(
-            input("Consultation Fee : ")
+            input(
+                "Enter Consultation Fee : "
+            )
         )
 
         medicine_charges = float(
-            input("Medicine Charges : ")
+            input(
+                "Enter Medicine Charges : "
+            )
         )
 
         laboratory_charges = float(
-            input("Laboratory Charges : ")
+            input(
+                "Enter Laboratory Charges : "
+            )
         )
 
         room_charges = float(
-            input("Room Charges : ")
+            input(
+                "Enter Room Charges : "
+            )
         )
 
         discount = float(
-            input("Discount : ")
+            input(
+                "Enter Discount : "
+            )
         )
 
         payment_status = input(
-            "Payment Status (Paid/Pending) : "
+            "Enter Payment Status (Paid/Pending) : "
         ).title()
 
         # -------------------------------
         # Validation
         # -------------------------------
 
-        amounts = [
-            consultation_fee,
-            medicine_charges,
-            laboratory_charges,
-            room_charges,
-            discount
-        ]
+        if consultation_fee < 0:
 
-        for amount in amounts:
+            print(
+                "Consultation Fee cannot be negative."
+            )
 
-            if amount < 0:
-                print("Charges cannot be negative.")
-                logger.error("Negative amount entered.")
-                return
+            return
+
+        if medicine_charges < 0:
+
+            print(
+                "Medicine Charges cannot be negative."
+            )
+
+            return
+
+        if laboratory_charges < 0:
+
+            print(
+                "Laboratory Charges cannot be negative."
+            )
+
+            return
+
+        if room_charges < 0:
+
+            print(
+                "Room Charges cannot be negative."
+            )
+
+            return
+
+        if discount < 0:
+
+            print(
+                "Discount cannot be negative."
+            )
+
+            return
 
         gross_amount = (
             consultation_fee
@@ -132,20 +231,31 @@ def generate_bill():
         )
 
         if discount > gross_amount:
-            print("Discount cannot exceed Gross Amount.")
-            logger.error("Invalid Discount")
+
+            print(
+                "Discount cannot be greater than Gross Amount."
+            )
+
+            application_logger.warning(
+                "Invalid Discount Entered."
+            )
+
             return
 
-        total_amount = gross_amount - discount
+        total_amount = (
+            gross_amount - discount
+        )
 
-        if payment_status not in ("Paid", "Pending"):
-            print("Invalid Payment Status.")
-            logger.error("Invalid Payment Status")
+        if payment_status not in (
+            "Paid",
+            "Pending"
+        ):
+
+            print(
+                "Invalid Payment Status."
+            )
+
             return
-
-        # -------------------------------
-        # Insert Bill
-        # -------------------------------
 
         query = """
         INSERT INTO bills
@@ -183,64 +293,93 @@ def generate_bill():
             payment_status
         )
 
-        cursor.execute(query, values)
+        cursor.execute(
+            query,
+            values
+        )
 
         connection.commit()
 
-        print("\nBill Generated Successfully")
+        print(
+            "\nBill Generated Successfully."
+        )
 
-        print(f"Gross Amount : {gross_amount}")
+        print(
+            f"Gross Amount : {gross_amount}"
+        )
 
-        print(f"Total Amount : {total_amount}")
+        print(
+            f"Total Amount : {total_amount}"
+        )
 
-        logger.info(
+        application_logger.info(
             f"Bill {bill_id} generated successfully."
         )
 
     except ValueError:
 
-        print("Please enter valid numeric values.")
+        print(
+            "Please enter valid numeric values."
+        )
 
-        logger.exception("Value Error")
+        exception_logger.exception(
+            "ValueError occurred while generating bill."
+        )
+
+    except mysql.connector.Error as error:
+
+        print(
+            "Database Error :",
+            error
+        )
+
+        exception_logger.exception(error)
 
     except Exception as error:
 
-        print("Error :", error)
+        print(
+            "Unexpected Error :",
+            error
+        )
 
-        logger.exception(error)
+        exception_logger.exception(error)
 def view_all_bills():
 
     try:
 
-        cursor.execute("""
-            SELECT
-                b.bill_id,
-                b.patient_id,
-                p.patient_name,
-                b.appointment_id,
-                b.gross_amount,
-                b.discount,
-                b.total_amount,
-                b.payment_status
+        query = """
+        SELECT
+            b.bill_id,
+            b.patient_id,
+            p.patient_name,
+            b.appointment_id,
+            b.gross_amount,
+            b.discount,
+            b.total_amount,
+            b.payment_status
+        FROM bills b
+        INNER JOIN patients p
+        ON b.patient_id = p.patient_id
+        ORDER BY b.bill_id
+        """
 
-            FROM bills b
-
-            INNER JOIN patients p
-            ON b.patient_id = p.patient_id
-
-            ORDER BY b.bill_id
-        """)
+        cursor.execute(query)
 
         bills = cursor.fetchall()
 
-        if not bills:
+        if len(bills) == 0:
+
             print("\nNo Bills Found.")
-            logger.warning("No bills available.")
+
+            application_logger.warning(
+                "No bills available."
+            )
+
             return
 
-        print("\n" + "=" * 80)
+        print("\n" + "=" * 70)
         print("ALL BILLS")
-        print("=" * 80)
+        print("=" * 70)
 
         for bill in bills:
 
@@ -253,15 +392,31 @@ Gross Amount      : {bill[4]}
 Discount          : {bill[5]}
 Total Amount      : {bill[6]}
 Payment Status    : {bill[7]}
-            """)
+""")
 
-            print("-" * 80)
+            print("-" * 70)
+
+        application_logger.info(
+            "Viewed all bills successfully."
+        )
+
+    except mysql.connector.Error as error:
+
+        print(
+            "Database Error :",
+            error
+        )
+
+        exception_logger.exception(error)
 
     except Exception as error:
 
-        print("Error :", error)
+        print(
+            "Unexpected Error :",
+            error
+        )
 
-        logger.exception(error)
+        exception_logger.exception(error)
 
 
 def search_patient_bills():
@@ -272,7 +427,8 @@ def search_patient_bills():
             "Enter Patient ID : "
         ).strip()
 
-        cursor.execute("""
+        cursor.execute(
+            """
             SELECT
                 bill_id,
                 appointment_id,
@@ -280,20 +436,22 @@ def search_patient_bills():
                 discount,
                 total_amount,
                 payment_status
-
             FROM bills
-
             WHERE patient_id=%s
-        """, (patient_id,))
+            """,
+            (patient_id,)
+        )
 
         bills = cursor.fetchall()
 
-        if not bills:
+        if len(bills) == 0:
 
-            print("No Bills Found.")
+            print(
+                "No Bills Found For This Patient."
+            )
 
-            logger.warning(
-                f"No bills found for Patient {patient_id}"
+            application_logger.warning(
+                f"No bills found for Patient ID : {patient_id}"
             )
 
             return
@@ -315,30 +473,61 @@ Gross Amount     : {bill[2]}
 Discount         : {bill[3]}
 Total Amount     : {bill[4]}
 Payment Status   : {bill[5]}
-            """)
+""")
 
             print("-" * 70)
 
-            total_billed += float(bill[4])
+            total_billed += float(
+                bill[4]
+            )
 
             if bill[5] == "Paid":
-                total_paid += float(bill[4])
+
+                total_paid += float(
+                    bill[4]
+                )
+
             else:
-                total_pending += float(bill[4])
+
+                total_pending += float(
+                    bill[4]
+                )
 
         print("\n========== BILL SUMMARY ==========")
 
-        print(f"Total Billed Amount  : {total_billed}")
+        print(
+            f"Total Billed Amount  : {total_billed}"
+        )
 
-        print(f"Total Paid Amount    : {total_paid}")
+        print(
+            f"Total Paid Amount    : {total_paid}"
+        )
 
-        print(f"Total Pending Amount : {total_pending}")
+        print(
+            f"Total Pending Amount : {total_pending}"
+        )
+
+        application_logger.info(
+            f"Searched bills for Patient ID : {patient_id}"
+        )
+
+    except mysql.connector.Error as error:
+
+        print(
+            "Database Error :",
+            error
+        )
+
+        exception_logger.exception(error)
 
     except Exception as error:
 
-        print("Error :", error)
+        print(
+            "Unexpected Error :",
+            error
+        )
 
-        logger.exception(error)
+        exception_logger.exception(error)
 def update_payment_status():
 
     try:
@@ -347,19 +536,24 @@ def update_payment_status():
             "Enter Bill ID : "
         ).strip()
 
-        cursor.execute("""
+        cursor.execute(
+            """
             SELECT payment_status
             FROM bills
             WHERE bill_id=%s
-        """, (bill_id,))
+            """,
+            (bill_id,)
+        )
 
         bill = cursor.fetchone()
 
         if bill is None:
 
-            print("Bill ID not found.")
+            print(
+                "Bill ID does not exist."
+            )
 
-            logger.warning(
+            application_logger.warning(
                 f"Invalid Bill ID : {bill_id}"
             )
 
@@ -367,30 +561,49 @@ def update_payment_status():
 
         if bill[0] == "Paid":
 
-            print("Payment is already completed.")
+            print(
+                "Payment is already completed."
+            )
 
-            logger.warning(
-                f"Bill {bill_id} already paid."
+            application_logger.warning(
+                f"Bill {bill_id} is already paid."
             )
 
             return
 
-        cursor.execute("""
+        cursor.execute(
+            """
             UPDATE bills
             SET payment_status='Paid'
             WHERE bill_id=%s
-        """, (bill_id,))
+            """,
+            (bill_id,)
+        )
 
         connection.commit()
 
-        print("\nPayment Status Updated Successfully.")
-
-        logger.info(
-            f"Payment updated for Bill {bill_id}"
+        print(
+            "\nPayment Status Updated Successfully."
         )
+
+        application_logger.info(
+            f"Payment status updated for Bill ID : {bill_id}"
+        )
+
+    except mysql.connector.Error as error:
+
+        print(
+            "Database Error :",
+            error
+        )
+
+        exception_logger.exception(error)
 
     except Exception as error:
 
-        print("Error :", error)
+        print(
+            "Unexpected Error :",
+            error
+        )
 
-        logger.exception(error)
+        exception_logger.exception(error)
