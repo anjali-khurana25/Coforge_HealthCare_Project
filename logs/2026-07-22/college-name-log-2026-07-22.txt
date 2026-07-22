@@ -1,7 +1,0 @@
-2026-07-22 14:06:21,203 | INFO | University Management System started.
-2026-07-22 14:06:21,204 | INFO | University Management System closed.
-2026-07-22 14:07:45,156 | INFO | University Management System started.
-2026-07-22 14:07:45,159 | INFO | University Management System closed.
-2026-07-22 14:08:02,502 | INFO | University Management System started.
-2026-07-22 14:08:15,839 | INFO | MySQL database connection established.
-2026-07-22 14:08:15,889 | INFO | University with ID 101 and name '11' added successfully.
