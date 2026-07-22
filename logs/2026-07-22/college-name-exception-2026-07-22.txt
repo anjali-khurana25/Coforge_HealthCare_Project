@@ -1,0 +1,12 @@
+2026-07-22 15:14:46,431 | ERROR | Invalid menu input: invalid literal for int() with base 10: 'python -u "c:\\Users\\SAMRIDDHI KAPOOR\\OneDrive\\文档\\coding\\C2C\\Python Training\\PROJECT- Coforge Management System\\add_student_uni.py"'
+Traceback (most recent call last):
+  File "c:\Users\SAMRIDDHI KAPOOR\OneDrive\文档\coding\C2C\Python Training\PROJECT- Coforge Management System\student_main.py", line 42, in main
+    choice = int(
+             ^^^^
+ValueError: invalid literal for int() with base 10: 'python -u "c:\\Users\\SAMRIDDHI KAPOOR\\OneDrive\\文档\\coding\\C2C\\Python Training\\PROJECT- Coforge Management System\\add_student_uni.py"'
+2026-07-22 15:42:25,676 | ERROR | Invalid menu input: invalid literal for int() with base 10: 'python -u "c:\\Users\\SAMRIDDHI KAPOOR\\OneDrive\\文档\\coding\\C2C\\Python Training\\PROJECT- Coforge Management System\\logger_config.py"'
+Traceback (most recent call last):
+  File "c:\Users\SAMRIDDHI KAPOOR\OneDrive\文档\coding\C2C\Python Training\PROJECT- Coforge Management System\student_main.py", line 42, in main
+    choice = int(
+             ^^^^
+ValueError: invalid literal for int() with base 10: 'python -u "c:\\Users\\SAMRIDDHI KAPOOR\\OneDrive\\文档\\coding\\C2C\\Python Training\\PROJECT- Coforge Management System\\logger_config.py"'

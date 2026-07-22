@@ -1,0 +1,69 @@
+2026-07-21 15:07:33,334 INFO University with ID 101 added successfully.
+2026-07-21 15:07:33,335 INFO Add University function executed successfully.
+2026-07-21 15:11:05,870 INFO University with ID 1010 added successfully.
+2026-07-21 15:11:05,872 INFO Add University function executed successfully.
+2026-07-21 15:11:20,540 ERROR invalid literal for int() with base 10: 'hii'
+2026-07-21 15:11:33,783 ERROR invalid literal for int() with base 10: 'gh'
+2026-07-21 15:15:42,168 WARNING No universities found.
+2026-07-21 15:15:42,168 INFO View All Universities function executed successfully.
+2026-07-21 15:21:38,315 WARNING No universities found.
+2026-07-21 15:21:38,316 INFO View All Universities function executed successfully.
+2026-07-21 15:31:15,897 INFO University with ID 101 added successfully.
+2026-07-21 15:31:15,898 INFO Add University function executed successfully.
+2026-07-21 15:31:15,913 WARNING No universities found.
+2026-07-21 15:31:15,913 INFO View All Universities function executed successfully.
+2026-07-21 15:31:28,457 WARNING No universities found.
+2026-07-21 15:31:28,457 INFO View All Universities function executed successfully.
+2026-07-21 15:32:09,740 INFO University with ID 101 added successfully.
+2026-07-21 15:32:09,741 INFO Add University function executed successfully.
+2026-07-21 15:32:09,767 WARNING No universities found.
+2026-07-21 15:32:09,768 INFO View All Universities function executed successfully.
+2026-07-21 15:32:45,176 INFO University with ID 11 added successfully.
+2026-07-21 15:32:45,177 INFO Add University function executed successfully.
+2026-07-21 15:32:45,179 WARNING No universities found.
+2026-07-21 15:32:45,180 INFO View All Universities function executed successfully.
+2026-07-21 15:36:09,378 WARNING No universities found.
+2026-07-21 15:36:09,379 INFO View All Universities function executed successfully.
+2026-07-21 15:36:38,495 WARNING No universities found.
+2026-07-21 15:36:38,496 INFO View All Universities function executed successfully.
+2026-07-21 15:39:55,833 INFO University with ID 11 added successfully.
+2026-07-21 15:39:55,833 INFO Add University function executed successfully.
+2026-07-21 15:40:21,925 INFO University with ID 13 added successfully.
+2026-07-21 15:40:21,925 INFO Add University function executed successfully.
+2026-07-21 15:43:46,832 WARNING No universities found.
+2026-07-21 15:43:46,833 INFO View All Universities function executed successfully.
+2026-07-21 15:43:48,037 WARNING No universities found.
+2026-07-21 15:43:48,038 INFO View All Universities function executed successfully.
+2026-07-21 15:43:49,152 WARNING No universities found.
+2026-07-21 15:43:49,152 INFO View All Universities function executed successfully.
+2026-07-21 15:43:49,707 WARNING No universities found.
+2026-07-21 15:43:49,707 INFO View All Universities function executed successfully.
+2026-07-21 15:43:50,670 WARNING No universities found.
+2026-07-21 15:43:50,671 INFO View All Universities function executed successfully.
+2026-07-21 15:44:06,080 ERROR invalid literal for int() with base 10: ''
+2026-07-21 15:44:23,922 WARNING No universities found.
+2026-07-21 15:44:23,922 INFO View All Universities function executed successfully.
+2026-07-21 15:44:25,501 WARNING No universities found.
+2026-07-21 15:44:25,501 INFO View All Universities function executed successfully.
+2026-07-21 15:44:38,830 INFO University with ID 101 added successfully.
+2026-07-21 15:44:38,831 INFO Add University function executed successfully.
+2026-07-21 15:44:40,887 INFO University ID: 101, Students: {11: ['sam', 21, 'cse']}
+2026-07-21 15:44:40,888 INFO View All Universities function executed successfully.
+2026-07-21 15:44:41,706 INFO University ID: 101, Students: {11: ['sam', 21, 'cse']}
+2026-07-21 15:44:41,707 INFO View All Universities function executed successfully.
+2026-07-21 15:46:51,659 INFO University with ID 101 added successfully.
+2026-07-21 15:46:51,660 INFO Add University function executed successfully.
+2026-07-21 15:46:54,284 INFO University ID: 101, Students: {11: ['sam', 21, 'cse']}
+2026-07-21 15:46:54,284 INFO View All Universities function executed successfully.
+2026-07-21 15:57:21,857 INFO University with ID 101 added successfully.
+2026-07-21 15:57:21,857 INFO Add University function executed successfully.
+2026-07-21 15:57:46,593 WARNING No university found with ID 11
+2026-07-21 15:57:46,593 INFO Add Student function executed successfully.
+2026-07-21 15:57:48,705 CRITICAL Program terminated.
+2026-07-21 16:02:36,550 INFO University added successfully.
+2026-07-21 16:02:48,021 ERROR invalid literal for int() with base 10: 'hii'
+2026-07-21 16:04:15,677 WARNING No universities found.
+2026-07-21 16:04:15,677 INFO View function executed successfully.
+2026-07-21 16:04:59,557 INFO University added successfully.
+2026-07-21 16:05:16,787 WARNING No universities found.
+2026-07-21 16:05:16,788 INFO View function executed successfully.

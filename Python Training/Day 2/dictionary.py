@@ -1,130 +1,88 @@
-colleges = [
-    {
-        "College": "MRU",
-        "College_ID": 1,
-        "Students": [
-            {
-                "Name": "Samriddhi",
-                "Age": 21,
-                "Branch": "CSE",
-                "Student_ID": 101
-            }
-        ]
-    },
-    {
-        "College": "MRU",
-        "College_ID": 2,
-        "Students": [
-            {
-                "Name": "Lavnaya",
-                "Age": 22,
-                "Branch": "IT",
-                "Student_ID": 201
-            }
-        ]
-    }
-]
+import logging
+import student_university_module
+from view_all_universities import view_all_universities
+
+logging.basicConfig(
+    filename="university.log",
+    level=logging.INFO,
+    format="%(asctime)s %(levelname)s %(message)s"
+)
+
+def add_student_to_university(u_id, student_id, student_name, age, branch):
+    try:
+        if u_id in student_university_module.universities:
+
+            if student_id in student_university_module.universities[u_id]:
+                print(f"Student with ID {student_id} already exists.")
+                logging.warning(f"Student with ID {student_id} already exists.")
+            else:
+                student_university_module.universities[u_id][student_id] = [
+                    student_name,
+                    age,
+                    branch
+                ]
+                print("Student added successfully.")
+                logging.info("Student added successfully.")
+
+        else:
+            print("University not found.")
+            logging.warning("University not found.")
+
+    except Exception as e:
+        print(f"Error while adding student: {e}")
+        logging.error(str(e))
+
+    else:
+        logging.info("Add Student function executed successfully.")
+
 
 while True:
-    print("\n-------------------------------------")
-    print("      Student Management System")
-    print("-------------------------------------")
-    print("1. Add Student Details")
-    print("2. View Student Details")
-    print("3. Update Student Details")
+
+    print("\n==============================")
+    print("1. Add University")
+    print("2. View All Universities")
+    print("3. Add Student")
     print("4. Exit")
 
-    choice = input("Enter your choice (1-4): ")
+    choice = int(input("Enter Choice: "))
 
-    if choice == "1":
+    if choice == 1:
 
-        college_id = int(input("Enter College ID (1-MRIIRS, 2-MRU): "))
+        u_id = int(input("Enter University ID: "))
+        student_id = int(input("Enter Student ID: "))
+        student_name = input("Enter Student Name: ")
+        age = int(input("Enter Age: "))
+        branch = input("Enter Branch: ")
 
-        found = False
+        student_list = {
+            student_id: [student_name, age, branch]
+        }
 
-        for college in colleges:
-            if college["College_ID"] == college_id:
+        student_university_module.add_university(u_id, student_list)
 
-                name = input("Enter Student Name: ")
-                age = int(input("Enter Age: "))
-                branch = input("Enter Branch: ")
-                student_id = int(input("Enter Student ID: "))
+    elif choice == 2:
 
-                duplicate = False
+        view_all_universities()
 
-                for c in colleges:
-                    for student in c["Students"]:
-                        if student["Student_ID"] == student_id:
-                            duplicate = True
-                            break
-                    if duplicate:
-                        break
+    elif choice == 3:
 
-                if duplicate:
-                    print("Student ID is already assigned.")
-                else:
-                    student = {
-                        "Name": name,
-                        "Age": age,
-                        "Branch": branch,
-                        "Student_ID": student_id
-                    }
+        u_id = int(input("Enter University ID: "))
+        student_id = int(input("Enter Student ID: "))
+        student_name = input("Enter Student Name: ")
+        age = int(input("Enter Age: "))
+        branch = input("Enter Branch: ")
 
-                    college["Students"].append(student)
-                    print("Student added successfully.")
+        add_student_to_university(
+            u_id,
+            student_id,
+            student_name,
+            age,
+            branch
+        )
 
-                found = True
-                break
-
-        if found == False:
-            print("College not found.")
-
-    elif choice == "2":
-
-        for college in colleges:
-
-            print("\n===================================")
-            print("College Name :", college["College"])
-            print("College ID   :", college["College_ID"])
-            print("===================================")
-
-            if len(college["Students"]) == 0:
-                print("No Students Available.")
-            else:
-                for student in college["Students"]:
-                    print("Student ID :", student["Student_ID"])
-                    print("Name       :", student["Name"])
-                    print("Age        :", student["Age"])
-                    print("Branch     :", student["Branch"])
-                    print("-----------------------------------")
-
-    elif choice == "3":
-
-        student_id = int(input("Enter Student ID to Update: "))
-
-        found = False
-
-        for college in colleges:
-            for student in college["Students"]:
-                if student["Student_ID"] == student_id:
-
-                    student["Name"] = input("Enter New Name: ")
-                    student["Age"] = int(input("Enter New Age: "))
-                    student["Branch"] = input("Enter New Branch: ")
-
-                    print("Student details updated successfully.")
-                    found = True
-                    break
-
-            if found:
-                break
-
-        if found == False:
-            print("Student not found.")
-
-    elif choice == "4":
-        print("Thank You!")
+    elif choice == 4:
+        print("Thank You")
         break
 
     else:
-        print("Invalid Choice.")
+        print("Invalid Choice")

@@ -1,28 +1,24 @@
 import logging
 
 logging.basicConfig(
-    filename="employee_payroll.log",
     level=logging.DEBUG,
-    format="%(asctime)s - %(levelname)s - %(message)s"
+    format="%(levelname)s - %(message)s"
 )
 
-
 def get_employee_details():
-    logging.info("Entering employee details")
+    logging.info("Enter Employee Details")
 
     while True:
         emp_id = input("Enter Employee ID: ").strip()
-        if emp_id:
+        if emp_id != "":
             break
         logging.warning("Employee ID cannot be empty")
-        print("Employee ID cannot be empty.")
 
     while True:
         name = input("Enter Employee Name: ").strip()
-        if name:
+        if name != "":
             break
         logging.warning("Employee Name cannot be empty")
-        print("Employee Name cannot be empty.")
 
     while True:
         try:
@@ -30,34 +26,28 @@ def get_employee_details():
             if basic_salary > 0:
                 break
             logging.warning("Basic Salary must be greater than zero")
-            print("Basic Salary must be greater than zero.")
         except ValueError:
             logging.error("Invalid Basic Salary")
-            print("Invalid input.")
 
     while True:
         try:
             overtime_hours = int(input("Enter Overtime Hours: "))
             if overtime_hours >= 0:
                 break
-            logging.warning("Negative overtime hours entered")
-            print("Overtime hours cannot be negative.")
+            logging.warning("Overtime Hours cannot be negative")
         except ValueError:
             logging.error("Invalid Overtime Hours")
-            print("Invalid input.")
 
     while True:
         try:
             leave_days = int(input("Enter Leave Days: "))
             if leave_days >= 0:
                 break
-            logging.warning("Negative leave days entered")
-            print("Leave days cannot be negative.")
+            logging.warning("Leave Days cannot be negative")
         except ValueError:
             logging.error("Invalid Leave Days")
-            print("Invalid input.")
 
-    logging.info("Employee details entered successfully")
+    logging.info("Employee Details Saved Successfully")
 
     return {
         "id": emp_id,
@@ -79,7 +69,7 @@ def calculate_da(basic_salary):
 
 
 def calculate_overtime(overtime_hours):
-    logging.debug("Calculating Overtime")
+    logging.debug("Calculating Overtime Payment")
     return overtime_hours * 500
 
 
@@ -106,7 +96,7 @@ def calculate_professional_tax(gross_salary):
 
 
 def calculate_payroll(employee):
-    logging.info("Calculating Payroll")
+    logging.info("Calculating Monthly Payroll")
 
     hra = calculate_hra(employee["basic_salary"])
     da = calculate_da(employee["basic_salary"])
@@ -121,7 +111,7 @@ def calculate_payroll(employee):
     total_deduction = pf + professional_tax + leave_deduction
     net_salary = gross_salary - total_deduction
 
-    logging.info("Payroll calculated successfully")
+    logging.info("Payroll Calculated Successfully")
 
     return {
         "hra": hra,
@@ -137,42 +127,40 @@ def calculate_payroll(employee):
 
 
 def display_salary_slip(employee, payroll):
-    logging.info("Displaying Salary Slip")
-
-    print("\n----------------------------------------")
-    print("         EMPLOYEE SALARY SLIP")
-    print("----------------------------------------")
-    print("Employee ID       :", employee["id"])
-    print("Employee Name     :", employee["name"])
-    print("Basic Salary      : ₹", format(employee["basic_salary"], ".2f"))
-    print("HRA               : ₹", format(payroll["hra"], ".2f"))
-    print("DA                : ₹", format(payroll["da"], ".2f"))
-    print("Overtime Payment  : ₹", format(payroll["overtime"], ".2f"))
-    print("Gross Salary      : ₹", format(payroll["gross_salary"], ".2f"))
-    print("PF Deduction      : ₹", format(payroll["pf"], ".2f"))
-    print("Professional Tax  : ₹", format(payroll["professional_tax"], ".2f"))
-    print("Leave Deduction   : ₹", format(payroll["leave_deduction"], ".2f"))
-    print("Total Deduction   : ₹", format(payroll["total_deduction"], ".2f"))
-    print("Net Salary        : ₹", format(payroll["net_salary"], ".2f"))
-    print("----------------------------------------")
+    logging.info("----------------------------------------")
+    logging.info("EMPLOYEE SALARY SLIP")
+    logging.info("----------------------------------------")
+    logging.info(f"Employee ID       : {employee['id']}")
+    logging.info(f"Employee Name     : {employee['name']}")
+    logging.info(f"Basic Salary      : ₹{employee['basic_salary']:.2f}")
+    logging.info(f"HRA               : ₹{payroll['hra']:.2f}")
+    logging.info(f"DA                : ₹{payroll['da']:.2f}")
+    logging.info(f"Overtime Payment  : ₹{payroll['overtime']:.2f}")
+    logging.info(f"Gross Salary      : ₹{payroll['gross_salary']:.2f}")
+    logging.info(f"PF Deduction      : ₹{payroll['pf']:.2f}")
+    logging.info(f"Professional Tax  : ₹{payroll['professional_tax']:.2f}")
+    logging.info(f"Leave Deduction   : ₹{payroll['leave_deduction']:.2f}")
+    logging.info(f"Total Deduction   : ₹{payroll['total_deduction']:.2f}")
+    logging.info(f"Net Salary        : ₹{payroll['net_salary']:.2f}")
+    logging.info("----------------------------------------")
 
 
 employee = None
 payroll = None
 
 while True:
-    print("\nEMPLOYEE PAYROLL MANAGEMENT SYSTEM")
-    print("1. Enter Employee Details")
-    print("2. Calculate Monthly Payroll")
-    print("3. Display Salary Slip")
-    print("4. Calculate Annual Net Salary")
-    print("5. Exit")
+    logging.info("")
+    logging.info("EMPLOYEE PAYROLL MANAGEMENT SYSTEM")
+    logging.info("1. Enter Employee Details")
+    logging.info("2. Calculate Monthly Payroll")
+    logging.info("3. Display Salary Slip")
+    logging.info("4. Calculate Annual Net Salary")
+    logging.info("5. Exit")
 
     try:
         choice = int(input("Enter your choice: "))
     except ValueError:
-        logging.error("Invalid menu choice")
-        print("Invalid input.")
+        logging.error("Invalid Menu Choice")
         continue
 
     if choice == 1:
@@ -180,33 +168,28 @@ while True:
 
     elif choice == 2:
         if employee is None:
-            logging.warning("Employee details not entered")
-            print("Enter employee details first.")
+            logging.warning("Employee details are not available")
         else:
             payroll = calculate_payroll(employee)
-            print("Monthly Payroll Calculated Successfully.")
 
     elif choice == 3:
-        if employee is None or payroll is None:
-            logging.warning("Salary slip requested before payroll calculation")
-            print("Please enter employee details and calculate payroll first.")
+        if employee is None:
+            logging.warning("Enter Employee Details First")
+        elif payroll is None:
+            logging.warning("Calculate Payroll First")
         else:
             display_salary_slip(employee, payroll)
 
     elif choice == 4:
         if payroll is None:
-            logging.warning("Annual salary requested before payroll calculation")
-            print("Calculate payroll first.")
+            logging.warning("Calculate Payroll First")
         else:
             annual_salary = payroll["net_salary"] * 12
-            logging.info("Annual salary calculated")
-            print("Annual Net Salary: ₹", format(annual_salary, ".2f"))
+            logging.info(f"Annual Net Salary : ₹{annual_salary:.2f}")
 
     elif choice == 5:
-        logging.critical("Program terminated")
-        print("Thank You")
+        logging.critical("Program Closed Successfully")
         break
 
     else:
-        logging.warning("Invalid menu option selected")
-        print("Invalid Choice.")
+        logging.error("Invalid Menu Option Selected")
